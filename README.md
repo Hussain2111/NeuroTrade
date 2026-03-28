@@ -1,6 +1,6 @@
-# Stock Market Predictor Platform
+# NeuroTrade - A Stock Market Predictor Platform
 
-The **Stock Market Predictor Platform** is a comprehensive, modular, and extensible platform for analyzing, visualizing, and predicting stock market trends using advanced machine learning and deep learning techniques. The repository blends data science workflows (Jupyter Notebooks), robust backend logic (Python), and modern frontend technologies (TypeScript/JavaScript) to provide an end-to-end solution for financial data analysis and prediction.
+**NeuroTrade** is a comprehensive, modular, and extensible platform for analyzing, visualizing, and predicting stock market trends using advanced machine learning and deep learning techniques. The repository blends data science workflows (Jupyter Notebooks), robust backend logic (Python), and modern frontend technologies (TypeScript/JavaScript) to provide an end-to-end solution for financial data analysis and prediction.
 
 ## Features
 
