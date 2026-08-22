@@ -1,0 +1,33 @@
+# Lean dependency set for the deployed backend (backend/app.py and everything
+# it actually imports at request time). Excludes tensorflow, matplotlib,
+# seaborn, scikit-learn, sqlalchemy, fastapi, uvicorn, pydantic, pypdf and
+# python-dotenv — those are only needed for local model training (see
+# backend/lstm_files/lstm_multivariate.py) or belong to the abandoned
+# main.py prototype, and pulling them into a hosting platform's build
+# massively slows the install and can hit free-tier build limits for no
+# benefit, since nothing the live app calls imports them.
+#
+# Use backend/requirements.txt (the full set) for local development,
+# including retraining a ticker's LSTM model.
+
+numpy>=1.24.3
+pandas>=2.0.0
+
+yfinance>=0.2.36
+newsdataapi
+textblob
+
+flask>=2.0.1
+flask-cors>=3.0.10
+
+pymongo>=4.6.0
+
+PyJWT>=2.2.0  # Note the capitalization (not jwt)
+
+requests>=2.31.0
+bcrypt>=3.2.0
+
+# Production WSGI server — Flask's built-in dev server isn't meant to serve
+# real traffic (no real concurrency, and running it with debug on is a
+# security risk since it exposes an interactive debugger on errors).
+gunicorn>=21.2.0

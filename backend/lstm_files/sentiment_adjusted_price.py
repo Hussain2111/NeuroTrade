@@ -1,11 +1,16 @@
 import pandas as pd
 from newsdataapi import NewsDataApiClient
-import ollama
 import yfinance as yf
 import json
 import sys
 import os
 import re
+
+# This script runs as its own subprocess (see app.py's /get-sentiment-adjusted-price
+# route), so it doesn't inherit backend/'s sys.path the way modules imported directly
+# into the Flask process do — add it explicitly to reach the shared groq_client module.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import groq_client
 
 # Get ticker from command line argument
 if len(sys.argv) < 2:
@@ -22,8 +27,8 @@ try:
 except:
     company_name = STOCK
 
-MODEL = "deepseek-r1:7b"
-api = NewsDataApiClient(apikey='pub_67694630073f7b1a43688748fde40ddfd74bf')
+MODEL = None  # let groq_client fall back to its configured default
+api = NewsDataApiClient(apikey=os.environ.get("NEWSDATA_API_KEY"))
 ticker = yf.Ticker(STOCK)
 
 news_data = ""
@@ -119,17 +124,11 @@ def give_sentiment(prompt_text, model_name):
     """
     Function to ask a question to the model and get a response.
     """
-    full_response = ""
-    stream = ollama.chat(
+    full_response = groq_client.chat(
         model=model_name,
         messages=[{'role': 'user', 'content': prompt_text}],
-        stream=True,
     )
-    for chunk in stream:
-        chunk_content = chunk['message']['content']
-        print(chunk_content, end='')
-        full_response += chunk_content
-    print()
+    print(full_response)
     return full_response
 
 prompt = prompt = f"""

@@ -31,7 +31,7 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB connection string
-const MONGODB_URI = 'mongodb+srv://shayaanpk:QBlvNkoTYFQbXsq1@clusterlogin.mioes.mongodb.net/trading_app?retryWrites=true&w=majority&appName=ClusterLogin';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Flag to track MongoDB connection status
 let isMongoConnected = false;
