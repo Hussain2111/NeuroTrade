@@ -27,6 +27,11 @@ dist-ssr
 # Project files
 *.venv
 
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
 # Ignore changes made after running each time
 lstm_files/prediction_plot.png
 lstm_files/price_history.png
