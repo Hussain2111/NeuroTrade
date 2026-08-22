@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import logo from "./components/logo.jpg";
+import logo from "./components/logo.png";
 import { usePrediction } from "./components/context/PredictionContext";
 import { authService } from "./authService";
 import AuthModal from "./AuthModal";

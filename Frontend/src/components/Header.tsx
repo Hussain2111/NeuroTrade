@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "./logo.jpg";
+import logo from "./logo.png";
 import { Home } from "lucide-react";
 import AuthModal from "./AuthModal";
 import ProfileIcon from "./ProfileIcon";
