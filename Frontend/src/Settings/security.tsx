@@ -88,7 +88,7 @@ const Security = ({activeTab, preferences, setPreferences}: PreferencesProps) =>
             try {
                 // Try our regular backend first
                 console.log("Trying to delete account using backend server...");
-                const response = await fetch(`http://localhost:5001/api/user/delete`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/user/delete`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",

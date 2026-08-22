@@ -167,7 +167,7 @@ const Chatbot = ({ currentTicker }: { currentTicker: string }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5001/chat", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -833,7 +833,7 @@ const AnalysisDashboard = () => {
       try {
         // Get company name using yfinance
         const info = await fetch(
-          `http://localhost:5001/stock-info?ticker=${tickerState}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-info?ticker=${tickerState}`
         );
         const infoData = await info.json();
 
@@ -842,7 +842,7 @@ const AnalysisDashboard = () => {
 
           // Get price change data from stock-price-data endpoint
           const priceDataResponse = await fetch(
-            `http://localhost:5001/stock-price-data?ticker=${tickerState}&timeframe=1D`
+            `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-price-data?ticker=${tickerState}&timeframe=1D`
           );
           const priceData = await priceDataResponse.json();
 
@@ -882,8 +882,8 @@ const AnalysisDashboard = () => {
 
         // Get current price immediately
         // Set the global ticker to ensure we get the right price
-        await fetch(`http://localhost:5001/stock-info?ticker=${tickerState}`);
-        const priceResponse = await fetch(`http://localhost:5001/stock-price`);
+        await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-info?ticker=${tickerState}`);
+        const priceResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-price`);
         const priceData = await priceResponse.json();
 
         if (priceData.success) {
@@ -915,7 +915,7 @@ const AnalysisDashboard = () => {
         console.log(`Starting analysis for ticker: ${tickerState}`);
 
         // Making the request to run LSTM
-        const analysisResponse = await fetch("http://localhost:5001/run-lstm", {
+        const analysisResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/run-lstm`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -934,7 +934,7 @@ const AnalysisDashboard = () => {
 
         // Fetch prediction immediately after analysis is complete
         const predictionResponse = await fetch(
-          `http://localhost:5001/get-prediction?ticker=${tickerState}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/get-prediction?ticker=${tickerState}`
         );
         const predictionData = await predictionResponse.json();
 
@@ -1003,7 +1003,7 @@ const AnalysisDashboard = () => {
         setIsLoading(true);
         // Pass the ticker as a query parameter
         const response = await fetch(
-          `http://localhost:5001/get-technical-fundamental?ticker=${tickerState}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/get-technical-fundamental?ticker=${tickerState}`
         );
         const data = await response.json();
 
@@ -1032,7 +1032,7 @@ const AnalysisDashboard = () => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `http://localhost:5001/get-sentiment?ticker=${tickerState}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/get-sentiment?ticker=${tickerState}`
         );
         const data = await response.json();
 
@@ -1064,7 +1064,7 @@ const AnalysisDashboard = () => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `http://localhost:5001/stock-price-data?ticker=${tickerState}&timeframe=${selectedTimeframe}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-price-data?ticker=${tickerState}&timeframe=${selectedTimeframe}`
         );
 
         if (!response.ok) {
@@ -1106,7 +1106,7 @@ const AnalysisDashboard = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:5001/api/stock-news?ticker=${tickerState}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/stock-news?ticker=${tickerState}`
         );
 
         if (!response.ok) {
@@ -1148,7 +1148,7 @@ const AnalysisDashboard = () => {
       // Change this line to use the specific sentiment loading state
       setIsLoadingSentiment(true);
       const response = await fetch(
-        `http://localhost:5001/get-sentiment-adjusted-price?ticker=${tickerState}`
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/get-sentiment-adjusted-price?ticker=${tickerState}`
       );
       const data = await response.json();
 
@@ -1383,7 +1383,7 @@ const AnalysisDashboard = () => {
                               setIsLoadingGraph(true);
                               // Retry prediction
                               fetch(
-                                `http://localhost:5001/get-prediction?ticker=${tickerState}`
+                                `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/get-prediction?ticker=${tickerState}`
                               )
                                 .then((res) => res.json())
                                 .then((data) => {

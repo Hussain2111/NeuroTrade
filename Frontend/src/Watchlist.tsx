@@ -46,7 +46,7 @@ const Watchlist = () => {
         // Join all tickers and fetch them in a batch for efficiency
         const tickers = watchlist.join(",");
         const batchResponse = await fetch(
-          `http://localhost:5001/api/stocks?symbols=${tickers}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/stocks?symbols=${tickers}`
         );
 
         if (!batchResponse.ok) {
@@ -132,13 +132,13 @@ const Watchlist = () => {
       try {
         // Get basic stock info
         const infoResponse = await fetch(
-          `http://localhost:5001/stock-info?ticker=${ticker}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-info?ticker=${ticker}`
         );
         const infoData = await infoResponse.json();
 
         // Important: Create a fresh request for each ticker to prevent caching issues
         const priceResponse = await fetch(
-          `http://localhost:5001/stock-price?ticker=${ticker}&_t=${Date.now()}`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-price?ticker=${ticker}&_t=${Date.now()}`
         );
         const priceData = await priceResponse.json();
 
@@ -153,7 +153,7 @@ const Watchlist = () => {
 
           // Get price change data
           const priceHistoryResponse = await fetch(
-            `http://localhost:5001/stock-price-data?ticker=${ticker}&timeframe=1D&_t=${Date.now()}`
+            `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-price-data?ticker=${ticker}&timeframe=1D&_t=${Date.now()}`
           );
           const priceHistoryData = await priceHistoryResponse.json();
 

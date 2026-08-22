@@ -42,7 +42,7 @@ export const WatchlistProvider: React.FC<WatchlistProviderProps> = ({
       try {
         // Check for user authentication status first
         const userResponse = await fetch(
-          "http://localhost:5001/api/user/current",
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/user/current`,
           {
             credentials: "include", // Important for sending cookies
           }
@@ -59,7 +59,7 @@ export const WatchlistProvider: React.FC<WatchlistProviderProps> = ({
         }
 
         // User is authenticated, fetch watchlist from database
-        const response = await fetch("http://localhost:5001/api/watchlist", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/watchlist`, {
           credentials: "include",
         });
 
@@ -93,7 +93,7 @@ export const WatchlistProvider: React.FC<WatchlistProviderProps> = ({
     if (!watchlist.includes(ticker)) {
       try {
         const response = await fetch(
-          "http://localhost:5001/api/watchlist/add",
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/watchlist/add`,
           {
             method: "POST",
             headers: {
@@ -130,7 +130,7 @@ export const WatchlistProvider: React.FC<WatchlistProviderProps> = ({
   const removeFromWatchlist = async (ticker: string) => {
     try {
       const response = await fetch(
-        "http://localhost:5001/api/watchlist/remove",
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/watchlist/remove`,
         {
           method: "DELETE",
           headers: {
