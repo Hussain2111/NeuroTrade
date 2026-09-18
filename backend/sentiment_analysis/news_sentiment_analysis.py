@@ -1,16 +1,10 @@
-import os
-import sys
 from newsdataapi import NewsDataApiClient
+import ollama
 import yfinance as yf
 
-# Standalone script, not called from the Flask app — add backend/ to sys.path
-# to reach the shared groq_client module, same as sentiment_adjusted_price.py.
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
-import groq_client
+MODEL = "deepseek-r1:7b"
 
-MODEL = None  # let groq_client fall back to its configured default
-
-api = NewsDataApiClient(apikey=os.environ.get("NEWSDATA_API_KEY"))
+api = NewsDataApiClient(apikey='pub_736718e9399326ef93bc5d214d31ad00dec04')
 STOCK = "Starbucks"
 ticker = yf.Ticker('SBUX')
 
@@ -39,11 +33,14 @@ def give_sentiment(prompt_text, model_name):
     """
     Function to pass the prompt and news to the model and get a response.
     """
-    response = groq_client.chat(
+    stream = ollama.chat(
         model=model_name,
         messages=[{'role': 'user', 'content': prompt_text}],
+        stream=True,
     )
-    print(response)
+    for chunk in stream:
+        print(chunk['message']['content'], end='')
+    print()
 
 prompt = """Give me a sentiment analysis in percentage 
             terms of negative and positive of {stock} based on 

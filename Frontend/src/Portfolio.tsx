@@ -48,7 +48,7 @@ const Portfolio = () => {
     }
 
     // Fetch portfolio data
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/portfolio?user_id=${userId}`, {
+    fetch(`http://localhost:5001/portfolio?user_id=${userId}`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -79,7 +79,7 @@ const Portfolio = () => {
       });
 
     // Fetch overall Profit/Loss
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/profit-or-loss`, {
+    fetch("http://localhost:5001/profit-or-loss", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -112,7 +112,7 @@ const Portfolio = () => {
     if (!userId || !authToken) return;
 
     fetch(
-      `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/stock-profit?user_id=${userId}&ticker=${ticker}`,
+      `http://localhost:5001/stock-profit?user_id=${userId}&ticker=${ticker}`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -142,7 +142,7 @@ const Portfolio = () => {
     if (!userId || !authToken) return;
 
     fetch(
-      `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/individual-stock?user_id=${userId}&ticker=${ticker}`,
+      `http://localhost:5001/individual-stock?user_id=${userId}&ticker=${ticker}`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

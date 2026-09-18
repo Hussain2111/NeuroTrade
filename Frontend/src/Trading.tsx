@@ -41,7 +41,7 @@ const fetchStockData = async (
 ): Promise<StockData> => {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/stock?symbol=${symbol}&period=${period}`
+      `http://localhost:5001/api/stock?symbol=${symbol}&period=${period}`
     );
 
     if (!response.ok) {
@@ -62,7 +62,7 @@ const searchStocks = async (
   try {
     if (!query || query.length < 2) return [];
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/search?q=${query}`);
+    const response = await fetch(`http://localhost:5001/api/search?q=${query}`);
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -201,8 +201,8 @@ const Trading = () => {
 
       const endpoint =
         transactionType === "buy"
-          ? `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/buy-stock`
-          : `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/sell-stock`;
+          ? "http://localhost:5001/buy-stock"
+          : "http://localhost:5001/sell-stock";
 
       const payload = {
         user_id: userId, // Use the actual user ID from auth

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import logo from "./components/logo.png";
+import logo from "./components/logo.jpg";
 import { usePrediction } from "./components/context/PredictionContext";
 import { authService } from "./authService";
 import AuthModal from "./AuthModal";
@@ -91,7 +91,7 @@ export default function HomePage() {
         .map((stock) => stock.symbol)
         .join(",");
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/stocks?symbols=${stockSymbols}`
+        `http://localhost:5001/api/stocks?symbols=${stockSymbols}`
       );
 
       if (!response.ok) {
@@ -158,7 +158,7 @@ export default function HomePage() {
         // Only run LSTM if we don't have predictions for this ticker
         if (currentTicker !== ticker) {
           // This code will likely not run due to the page navigation above
-          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/run-lstm`, {
+          const response = await fetch("http://localhost:5001/run-lstm", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

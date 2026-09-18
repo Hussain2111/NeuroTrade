@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from newsdataapi import NewsDataApiClient
-import groq_client
+import ollama
 from pymongo import MongoClient
 import yfinance as yf
 import os
@@ -53,7 +53,7 @@ init_lstm_routes(app)
 chatbot_service = ChatbotService()
 
 # MongoDB connection - using the same DB as the login server
-client = MongoClient(os.environ.get("MONGODB_URI"))
+client = MongoClient("mongodb+srv://shayaanpk:QBlvNkoTYFQbXsq1@clusterlogin.mioes.mongodb.net/trading_app?retryWrites=true&w=majority&appName=ClusterLogin")
 db = client["trading_app"]
 investments_collection = db["investments"]
 sales_collection = db["sold_stocks"]
@@ -339,7 +339,7 @@ def get_sentiment():
         stock = yf.Ticker(ticker)
         
         # Get news data from two sources
-        api = NewsDataApiClient(apikey=os.environ.get("NEWSDATA_API_KEY"))
+        api = NewsDataApiClient(apikey='pub_736718e9399326ef93bc5d214d31ad00dec04')
         news_data = ""
         
         # Get the news response from newsdata api
@@ -387,13 +387,17 @@ def get_sentiment():
                   }}
                   Only output the JSON."""
         
-        # Call Groq (hosted LLM) for sentiment analysis
-        sentiment_result = groq_client.chat(
+        # Call Ollama model for sentiment analysis
+        MODEL = "llama2"
+        response = ollama.chat(
+            model=MODEL,
             messages=[{'role': 'user', 'content': prompt}]
         )
-
+        
+        sentiment_result = response['message']['content']
+        
         # For Debugging: Print raw response
-        print("Raw Groq Response:", sentiment_result)
+        print("Raw Ollama Response:", sentiment_result)
         
         # Extract the JSON part from the response
         json_match = re.search(r'\{\s*"positive"\s*:\s*\d+\s*,\s*"negative"\s*:\s*\d+\s*,\s*"neutral"\s*:\s*\d+\s*\}', sentiment_result)
@@ -1465,5 +1469,4 @@ def get_sentiment_adjusted_price():
         })
 
 if __name__ == '__main__':
-    debug_mode = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5001)), debug=debug_mode)
+    app.run(host='0.0.0.0', port=5001, debug=True)

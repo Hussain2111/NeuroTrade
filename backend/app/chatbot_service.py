@@ -1,11 +1,11 @@
 from flask import jsonify
-import groq_client
+import ollama
 import yfinance as yf
 from typing import Dict, List, Optional
 from datetime import datetime
 
 class ChatbotService:
-    def __init__(self, model_name: str = None):
+    def __init__(self, model_name: str = "llama2"):
         self.model = model_name
         self.context = {}
         
@@ -52,10 +52,12 @@ class ChatbotService:
         """
         
         try:
-            return groq_client.chat(
+            response = ollama.chat(
                 model=self.model,
                 messages=[{'role': 'user', 'content': prompt}],
+                stream=False
             )
+            return response['message']['content']
         except Exception as e:
             return f"I apologize, but I encountered an error: {str(e)}"
 
