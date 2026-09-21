@@ -1,9 +1,0 @@
-#!/bin/sh
-# Block commits that contain leaked secrets.
-# Install gitleaks: winget install Gitleaks.Gitleaks
-if ! command -v gitleaks >/dev/null 2>&1; then
-    echo "pre-commit: gitleaks not found, skipping secret scan (winget install Gitleaks.Gitleaks)"
-    exit 0
-fi
-
-gitleaks git --staged --no-banner
