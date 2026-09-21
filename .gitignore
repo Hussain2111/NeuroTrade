@@ -37,3 +37,7 @@ lstm_files/prediction_plot.png
 lstm_files/price_history.png
 lstm_files/training_loss.png
 *.pyc
+
+# Generated model / prediction artifacts
+backend/lstm_files/*.keras
+backend/lstm_files/*_prediction_data.json

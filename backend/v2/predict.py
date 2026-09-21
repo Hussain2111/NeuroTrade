@@ -1,10 +1,16 @@
 from windows import test_data, scaler, scaled, timesteps
-from train import model
 import numpy as np
 import json
 import sys
 import datetime
 from pathlib import Path
+from keras.models import load_model
+
+ticker = sys.argv[1]
+out_dir = Path(__file__).resolve().parent.parent / "lstm_files"
+out_dir.mkdir(exist_ok=True)
+
+model = load_model(out_dir / f"{ticker}_model.keras")
 
 x_test, y_test = [], []
 
@@ -26,10 +32,6 @@ print(f"\nRoot Mean Square Error: {RMSE}")
 recent = scaled[-timesteps:, 0:1].reshape(1, timesteps, 1)
 next_day_scaled = model.predict(recent)
 next_day_price = scaler.inverse_transform(next_day_scaled)[0, 0]
-
-ticker = sys.argv[1]
-out_dir = Path(__file__).resolve().parent.parent / "lstm_files"
-out_dir.mkdir(exist_ok=True)
 
 prediction_data = {
     "next_day_price": round(float(next_day_price), 2),
