@@ -41,3 +41,5 @@ lstm_files/training_loss.png
 # Generated model / prediction artifacts
 backend/lstm_files/*.keras
 backend/lstm_files/*_prediction_data.json
+
+__pychache__
