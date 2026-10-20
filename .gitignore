@@ -42,4 +42,4 @@ lstm_files/training_loss.png
 backend/lstm_files/*.keras
 backend/lstm_files/*_prediction_data.json
 
-__pychache__
+__pychache__/
