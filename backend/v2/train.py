@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 from fetch_data import NoMarketData, InsuffcientMarketData, MarketDataUnavailable
+import json
 
 try:
     from keras.models import Sequential
@@ -22,24 +23,40 @@ try:
         y_train,
         epochs=5,
         batch_size=16,
-        verbose=1
+        verbose=0
     )
     ticker = sys.argv[1]
     out_dir = Path(__file__).resolve().parent.parent / "lstm_files"
     out_dir.mkdir(exist_ok=True)
     model.save(out_dir / f"{sys.argv[1]}_model.keras")
-    print(f"Model saved to: {out_dir / (sys.argv[1] + '_model.keras')}")
-
-    print(history.history['loss'])
+    print(json.dumps({
+        "status": "success"
+    }))
 
 except MarketDataUnavailable as err:
-    print(err, file=sys.stderr)
-    sys.exit(4)
+    print(json.dumps({
+            "status": "error",
+            "error": {
+                "code": "MARKET_DATA_UNAVAILABLE",
+                "message": str(err)
+            }
+}))
 except InsuffcientMarketData as err:
-    print(err, file=sys.stderr)
-    sys.exit(3)
+    print(json.dumps({
+            "status": "error",
+            "error": {
+                "code": "INSUFFICIENT_DATA",
+                "message": str(err)
+            }
+}))
 
 except NoMarketData as err:
-    print(err, file=sys.stderr)
-    sys.exit(2)
+    print(json.dumps({
+        "status": "error",
+        "error": {
+            "code": "INVALID_TICKER",
+            "message": str(err)
+        }
+}))
+
 
