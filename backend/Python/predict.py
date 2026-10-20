@@ -10,7 +10,7 @@ try:
     from keras.models import load_model
 
     ticker = sys.argv[1]
-    out_dir = Path(__file__).resolve().parent.parent / "lstm_files"
+    out_dir = Path(__file__).resolve().parent.parent / "Artifacts"
     out_dir.mkdir(exist_ok=True)
 
     model = load_model(out_dir / f"{ticker}_model.keras")

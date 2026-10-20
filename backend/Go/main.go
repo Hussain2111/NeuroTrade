@@ -119,7 +119,7 @@ func NewPythonPredictor() (*PythonPredictor, error) {
 func (p *PythonPredictor) modelPath(ticker string) string {
 	return filepath.Join(
 		p.backendPath,
-		"lstm_files",
+		"Artifacts",
 		ticker+"_model.keras",
 	)
 }

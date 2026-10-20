@@ -26,7 +26,7 @@ try:
         verbose=0
     )
     ticker = sys.argv[1]
-    out_dir = Path(__file__).resolve().parent.parent / "lstm_files"
+    out_dir = Path(__file__).resolve().parent.parent / "Artifacts"
     out_dir.mkdir(exist_ok=True)
     model.save(out_dir / f"{sys.argv[1]}_model.keras")
     print(json.dumps({
