@@ -91,25 +91,22 @@ func (p *PythonPredictor) Predict(ticker string) (Prediction, error) {
 }
 
 func NewPythonPredictor() (*PythonPredictor, error) {
-	pythonPath := os.Getenv("NEUROTRADE_PYTHON")
-	backendPath := os.Getenv("NEUROTRADE_BACKEND")
+	
+	backendPath, err := filepath.Abs("..")
 
-	if pythonPath == "" {
-		return nil, fmt.Errorf("NEUROTRADE_PYTHON is not configured")
+	if err != nil {
+		return nil, err
 	}
 
-	if backendPath == "" {
-		return nil, fmt.Errorf("NEUROTRADE_BACKEND is not configured")
-	}
+	pythonPath := filepath.Join(
+		backendPath,
+		"Python", ".venv", "Scripts", "python.exe",
+	)
 
-	if !filepath.IsAbs(pythonPath) {
-		return nil, fmt.Errorf("NEUROTRADE_PYTHON must be an absolute path")
+	if _, err := os.Stat(pythonPath); err != nil {
+		return nil, fmt.Errorf("Python executable not found: %w", err)
 	}
-
-	if !filepath.IsAbs(backendPath) {
-		return nil, fmt.Errorf("NEUROTRADE_BACKEND must be an absolute path")
-	}
-
+	
 	return &PythonPredictor{
 		pythonPath:  pythonPath,
 		backendPath: backendPath,
@@ -125,11 +122,11 @@ func (p *PythonPredictor) modelPath(ticker string) string {
 }
 
 func (p *PythonPredictor) trainScriptPath() string {
-	return filepath.Join(p.backendPath, "v2", "train.py")
+	return filepath.Join(p.backendPath, "Python", "train.py")
 }
 
 func (p *PythonPredictor) predictScriptPath() string {
-	return filepath.Join(p.backendPath, "v2", "predict.py")
+	return filepath.Join(p.backendPath, "Python", "predict.py")
 }
 
 func (p *PythonPredictor) runPython(scriptPath, ticker string) (PythonResponse, error) {
@@ -214,22 +211,21 @@ func (s *Server) stockHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	prediction, err := s.predictor.Predict(ticker)
 
-	if errors.Is(err, ErrInvalidTicker) {
-		http.Error(w, "invalid ticker", http.StatusBadRequest)
-		return
-	}
-
-	if errors.Is(err, ErrMarketDataUnavailable) {
-		http.Error(w, "market data not available", http.StatusServiceUnavailable)
-		return
-	}
-
-	if errors.Is(err, ErrInsufficientData) {
-		http.Error(w, "insufficient data", http.StatusUnprocessableEntity)
-		return
-	}
 	if err != nil {
-		http.Error(w, "prediction failed", http.StatusInternalServerError)
+		switch {
+		case errors.Is(err, ErrInvalidTicker):
+			http.Error(w, "invalid ticker", http.StatusBadRequest)
+
+		case errors.Is(err, ErrMarketDataUnavailable):
+			http.Error(w, "market data not available", http.StatusServiceUnavailable)
+
+		case errors.Is(err, ErrInsufficientData):
+			http.Error(w, "insufficient data", http.StatusUnprocessableEntity)
+
+		default:
+			http.Error(w, "prediction failed", http.StatusInternalServerError)
+		}
+
 		return
 	}
 
