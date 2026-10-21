@@ -26,7 +26,9 @@ for i in range(timesteps, len(train_data)):
 
 x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
-print(x_train.shape, y_train.shape)
+import sys
+
+print(x_train.shape, y_train.shape, file=sys.stderr)
 
 
 

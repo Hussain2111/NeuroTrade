@@ -149,6 +149,9 @@ func (p *PythonPredictor) runPython(scriptPath, ticker string) (PythonResponse, 
 
 	}
 	if err := json.Unmarshal(stdout.Bytes(), &response); err != nil {
+		log.Printf("Python stdout: %q", stdout.String())
+		log.Printf("Python stderr: %q", stderr.String())
+
 		return PythonResponse{}, fmt.Errorf("invalid Python JSON response: %w", err)
 	}
 
@@ -210,6 +213,10 @@ func (s *Server) stockHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	prediction, err := s.predictor.Predict(ticker)
+
+	if err != nil {
+    	log.Printf("Prediction failed for ticker %s: %v", ticker, err)
+	}	
 
 	if err != nil {
 		switch {
